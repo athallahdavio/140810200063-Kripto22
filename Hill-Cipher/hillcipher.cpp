@@ -2,25 +2,24 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int key[3][3];
-
+// Modulo
 int mod26(int x)
 {
     return x >= 0 ? (x % 26) : 26 - (abs(x) % 26);
 }
 
 // Perkalian matriks
-void multiplyMatrices(int a[1000][3], int a_rows, int a_cols, int b[1000][3], int b_rows, int b_cols, int res[1000][3])
+void multiplyMatrix(int m1[1000][3], int m1_rows, int m1_cols, int m2[1000][3], int m2_rows, int m2_cols, int hasil[1000][3])
 {
-    for (int i = 0; i < a_rows; i++)
+    for (int i = 0; i < m1_rows; i++)
     {
-        for (int j = 0; j < b_cols; j++)
+        for (int j = 0; j < m2_cols; j++)
         {
-            for (int k = 0; k < b_rows; k++)
+            for (int k = 0; k < m2_rows; k++)
             {
-                res[i][j] += a[i][k] * b[k][j];
+                hasil[i][j] += a[i][k] * b[k][j];
             }
-            res[i][j] = mod26(res[i][j]);
+            hasil[i][j] = mod26(hasil[i][j]);
         }
     }
 }
@@ -104,6 +103,8 @@ void findInverse(int m[3][3], int n, int m_inverse[3][3])
     }
 }
 
+int key[3][3];
+
 // Enkripsi
 string encrypt(string plainTeks, int n)
 {
@@ -125,7 +126,7 @@ string encrypt(string plainTeks, int n)
         }
     }
 
-    multiplyMatrices(plaintext, row, n, key, n, n, ciphertext);
+    multiplyMatrix(plaintext, row, n, key, n, n, ciphertext);
 
     string cipherTeks = "";
     for (int i = 0; i < row; i++)
@@ -158,7 +159,7 @@ string decrypt(string cipherTeks, int n)
     int k_inverse[3][3] = {0};
     findInverse(key, n, k_inverse);
 
-    multiplyMatrices(ciphertext, row, n, k_inverse, n, n, plaintext);
+    multiplyMatrix(ciphertext, row, n, k_inverse, n, n, plaintext);
 
     string plainTeks = "";
     for (int i = 0; i < row; i++)
